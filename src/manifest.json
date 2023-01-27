@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
 
-  "name": "tab list",
+  "name": "Tabs List",
   "description": "Show a list of open tabs for easy backup",
   "version": "1.7",
   "author": "dev@conceptualspace.net",
