@@ -1,3 +1,32 @@
 body {
     background-color: aliceblue;
+    align-self: center;
+    margin-bottom: 200px;
+}
+
+a, a:hover, a:focus, a:active {
+    text-decoration: none;
+    float: left;
+}
+
+#copy-tabs {
+    margin-left: 40%;
+    padding: 25px;
+    padding-left: 50px;
+    padding-right: 50px;
+    border-radius: 5px;
+    width: fit-content;
+    background-color: rgb(207, 214, 220);
+}
+
+#copy-tabs:hover {
+    filter: brightness(95%);
+}
+
+#copy-tabs:active {
+    filter: brightness(90%);
+}
+
+#list {
+    font-size: larger;
 }
