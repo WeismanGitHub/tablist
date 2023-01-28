@@ -7,14 +7,26 @@ let tabListTabId = null;
 
 function listTabs() {
     const list = document.getElementById('list');
+
     browser.tabs.query({}, function (tabs) {
+        tabs = tabs.sort((a,b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0))
+
         for (let i = 0; i < tabs.length; ++i) {
-            if (tabs[i].url && !tabs[i].url.startsWith("chrome") && !tabs[i].url.startsWith("moz") && !tabs[i].url.startsWith("about") && !tabs[i].url.startsWith("data") ) {
-                let p = document.createElement('p');
-                p.appendChild(document.createTextNode(tabs[i].url));
-                list.appendChild(p);
+            if (
+                tabs[i].url && !tabs[i].url.startsWith("chrome") &&
+                !tabs[i].url.startsWith("moz") && !tabs[i].url.startsWith("about") &&
+                !tabs[i].url.startsWith("data")
+            ) {
+                let anchor = document.createElement("a");
+                anchor.innerText = tabs[i].title;
+                anchor.href = tabs[i].url
+
+                list.append(document.createElement("br"))
+                list.appendChild(anchor)
+                list.append(document.createElement("br"))
             }
         }
+
         if (tabListTabId) {
             browser.tabs.update(tabListTabId, {active:true, highlighted:true});
         }
@@ -28,6 +40,7 @@ function activateTabs() {
                 active: true
             });
         }
+
         listTabs()
     });
 }
@@ -35,6 +48,7 @@ function activateTabs() {
 function init() {
     browser.tabs.getCurrent(function(tab) {
         tabListTabId = tab.id;
+
         browser.runtime.getPlatformInfo(function (platform) {
             if (platform.os === "android") {
                 // workaround for ff on android
@@ -47,5 +61,33 @@ function init() {
         });
     });
 }
+
+function copyToClipBoard() {
+    const urls = []
+
+    browser.tabs.query({}, function (tabs) {
+        tabs = tabs.sort((a,b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0))
+
+        for (let i = 0; i < tabs.length; ++i) {
+            if (
+                tabs[i].url && !tabs[i].url.startsWith("chrome") && 
+                !tabs[i].url.startsWith("moz") && !tabs[i].url.startsWith("about") && 
+                !tabs[i].url.startsWith("data")
+            ) {
+                urls.push(tabs[i].url)
+            }
+        }
+
+        navigator.clipboard.writeText(urls.join('\n'))
+    })
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const button = document.getElementById('copy-tabs');
+
+    button.addEventListener('click', function() {
+        copyToClipBoard();
+    });
+});
 
 init();
