@@ -20,6 +20,7 @@ a, a:hover, a:focus, a:active {
 }
 
 #copy-tabs:hover {
+    cursor: pointer;
     filter: brightness(95%);
 }
 
